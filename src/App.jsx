@@ -1,109 +1,95 @@
-import React, { useCallback } from 'react';
 import {
   Background,
   ReactFlow,
   useNodesState,
   useEdgesState,
-  addEdge,
   MiniMap,
   Controls,
-  MarkerType
+  MarkerType,
 } from '@xyflow/react';
+
 import '@xyflow/react/dist/style.css';
 
-const snapGrid = [20, 20];
+import CustomNode from './CustomNode';
+import FloatingEdge from './FloatingEdge';
+import CustomConnectionLine from './CustomConnectionLine';
+
 const initialNodes = [
   {
     id: 'Entity',
-    sourcePosition: 'bottom',
-    targetPosition: 'bottom',
-    data: { label: 'Entity' },
-    position: { x: 200, y: 0 },
+    type: 'custom',
+    position: { x: 300, y: 0 },
   },
   {
     id: 'Activity',
-    sourcePosition: 'top',
-    targetPosition: 'top',
-    data: { label: 'Activity' },
-    position: { x: 300, y: 160 },
+    type: 'custom',
+    position: { x: 300, y: 300 },
   },
   {
     id: 'Agent',
-    sourcePosition: 'right',
-    targetPosition: 'right',
-    data: { label: 'Agent' },
-    position: { x: 0, y: 100 },
-  },
+    type: 'custom',
+    position: { x: 0, y: 150 },
+  }
 ];
 
 const initialEdges = [
   {
-    id: 'Entity|wasGeneratedBy|Activity',
+    id: 'e1',
     source: 'Entity',
     target: 'Activity',
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-      width: 10,
-      height: 10,
-      color: 'black'
-    },
-    style: {
-      strokeWidth: 2,
-      stroke: 'black',
-    },
     label: 'wasGeneratedBy'
   },
   {
-    id: 'Activity|wasAssociatedWith|Agent',
+    id: 'e2',
     source: 'Activity',
     target: 'Agent',
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-      width: 10,
-      height: 10,
-      color: 'black'
-    },
-    style: {
-      strokeWidth: 2,
-      stroke: 'black',
-    },
-    label: "wasAssociatedWith"
+    label: 'wasAssociatedWith'
   },
   {
-    id: 'Entity|wasAttributedTo|Agent',
+    id: 'e3',
     source: 'Entity',
     target: 'Agent',
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-      width: 10,
-      height: 10,
-      color: 'black'
-    },
-    style: {
-      strokeWidth: 2,
-      stroke: 'black',
-    },
-    label: "wasAttributedTo"
-  },
+    label: 'wasAttributedTo'
+  }
 ];
 
-const HorizontalFlow = () => {
-  const [nodes, _, onNodesChange] = useNodesState(initialNodes);
+const connectionLineStyle = {
+  stroke: '#b1b1b7',
+};
+
+const nodeTypes = {
+  custom: CustomNode,
+};
+
+const edgeTypes = {
+  floating: FloatingEdge,
+};
+
+const defaultEdgeOptions = {
+  type: 'floating',
+  markerEnd: {
+    type: MarkerType.ArrowClosed,
+    color: '#b1b1b7',
+  },
+};
+
+const EasyConnectExample = () => {
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const onConnect = useCallback(
-    (params) => setEdges((els) => addEdge(params, els)),
-    [],
-  );
+
 
   return (
     <ReactFlow
       nodes={nodes}
       edges={edges}
       onNodesChange={onNodesChange}
-      snapToGrid={true}
-      snapGrid={snapGrid}
+      onEdgesChange={onEdgesChange}
       fitView
-      attributionPosition="bottom-left"
+      nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
+      defaultEdgeOptions={defaultEdgeOptions}
+      connectionLineComponent={CustomConnectionLine}
+      connectionLineStyle={connectionLineStyle}
     >
       <Background />
       <MiniMap />
@@ -112,4 +98,4 @@ const HorizontalFlow = () => {
   );
 };
 
-export default HorizontalFlow;
+export default EasyConnectExample;
