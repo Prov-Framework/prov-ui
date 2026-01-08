@@ -22,31 +22,25 @@ const elk = new ELK();
 
 const elkOptions = {
   'elk.algorithm': 'layered',
+  'elk.direction': 'LEFT',
   'elk.layered.spacing.nodeNodeBetweenLayers': '100',
+  'elk.spacing.nodeNode': '100',
   'elk.partitioning.activate': 'true'
 };
 
 const getLayoutedElements = (nodes, edges, options = {}) => {
-  const isHorizontal = options?.['elk.direction'] === 'RIGHT';
   const graph = {
     id: 'root',
     layoutOptions: options,
     children: nodes.map((node) => ({
       ...node,
-      // Adjust the target and source handle positions based on the layout
-      // direction.
-      targetPosition: isHorizontal ? 'left' : 'top',
-      sourcePosition: isHorizontal ? 'right' : 'bottom',
- 
       // Hardcode a width and height for elk to use when layouting.
       width: 150,
-      height: 100,
+      height: 50,
 
-      debug: (console.log(`Layouting node ${node.id}, layerId is ${node.layerId}`), null),
-
-      // Layer ordering - use the node's `layerId` property (if present)
       layoutOptions: {
-        'partitioning.partition': node.layerId, // Assign a unique partition ID
+        // Use string partition ids so ELK treats them consistently.
+        'partitioning.partition': 'layer' + (node.layerId ?? node.id),
       }
     })),
     edges: edges,
@@ -54,16 +48,56 @@ const getLayoutedElements = (nodes, edges, options = {}) => {
  
   return elk
     .layout(graph)
-    .then((layoutedGraph) => ({
-      nodes: layoutedGraph.children.map((node) => ({
+    .then((layoutedGraph) => {
+      // Debug: show the raw ELK output for inspection
+      console.log('ELK layout output:', layoutedGraph.children);
+
+      // Map ELK output to React Flow nodes
+      const layoutedNodes = layoutedGraph.children.map((node) => ({
         ...node,
-        // React Flow expects a position property on the node instead of `x`
-        // and `y` fields.
         position: { x: node.x, y: node.y },
-      })),
- 
-      edges: layoutedGraph.edges,
-    }))
+      }));
+
+      // Determine gap from options: prefer `elk.spacing.nodeNode`, fall back
+      // to layered spacing option, and default to 20px.
+      const gapOption = options['elk.spacing.nodeNode'] ?? options['elk.layered.spacing.nodeNodeBetweenLayers'] ?? '20';
+      const gap = Number.parseInt(String(gapOption), 10) || 20;
+
+      // Group nodes by original partition id (use nodes param to get original layerId)
+      const idToLayer = Object.fromEntries(nodes.map((n) => [n.id, n.layerId ?? n.id]));
+      const partitions = {};
+
+      layoutedNodes.forEach((n) => {
+        const layer = idToLayer[n.id] ?? n.id;
+        const key = 'layer' + layer;
+        if (!partitions[key]) partitions[key] = [];
+        partitions[key].push(n);
+      });
+
+      // Align x to average per partition and apply vertical spacing derived from gap
+      Object.values(partitions).forEach((group) => {
+        const avgX = group.reduce((s, item) => s + item.position.x, 0) / group.length;
+        group.forEach((item) => {
+          item.position.x = avgX;
+        });
+
+        // Preserve ELK ordering by y, then spread nodes around the group's average y
+        group.sort((a, b) => a.position.y - b.position.y);
+        const avgY = group.reduce((s, item) => s + item.position.y, 0) / group.length;
+        const maxHeight = Math.max(...group.map((n) => (n.height ?? 50)));
+        const step = maxHeight + gap;
+        const offsetCenter = (group.length - 1) / 2;
+
+        group.forEach((item, i) => {
+          item.position.y = avgY + (i - offsetCenter) * step;
+        });
+      });
+
+      return {
+        nodes: layoutedNodes,
+        edges: layoutedGraph.edges,
+      };
+    })
     .catch(console.error);
 };
 
@@ -72,7 +106,7 @@ const initialNodes = [
     id: 'Entity',
     type: 'custom',
     position: { x: 0, y: 0 },
-    layerId: 1
+    layerId: 2
   },
   {
     id: 'Activity',
@@ -84,7 +118,7 @@ const initialNodes = [
     id: 'Agent',
     type: 'custom',
     position: { x: 0, y: 0 },
-    layerId: 3
+    layerId: 1
   }
 ];
 
@@ -135,14 +169,9 @@ const EasyConnectExample = () => {
 
   const { fitView } = useReactFlow();
  
-  const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
   const onLayout = useCallback(
-    ({ direction, useInitialNodes = false }) => {
-      const opts = { 'elk.direction': direction, ...elkOptions };
-      const ns = useInitialNodes ? initialNodes : nodes;
-      const es = useInitialNodes ? initialEdges : edges;
- 
-      getLayoutedElements(ns, es, opts).then(
+    ({ }) => {
+      getLayoutedElements(initialNodes, initialEdges, elkOptions).then(
         ({ nodes: layoutedNodes, edges: layoutedEdges }) => {
           setNodes(layoutedNodes);
           setEdges(layoutedEdges);

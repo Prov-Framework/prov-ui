@@ -15,14 +15,13 @@ export default function CustomNode({ id }) {
         {!connection.inProgress && (
           <Handle
             className="customHandle"
-            position={Position.Right}
             type="source"
             isConnectable={false}
           />
         )}
         {/* We want to disable the target handle, if the connection was started from this node */}
         {(!connection.inProgress || isTarget) && (
-          <Handle className="customHandle" position={Position.Left} type="target" isConnectableStart={false} isConnectable={false} />
+          <Handle className="customHandle" type="target" isConnectableStart={false} isConnectable={false} />
         )}
         {id}
       </div>
