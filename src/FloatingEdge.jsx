@@ -1,4 +1,4 @@
-import { BaseEdge, getBezierPath, getSimpleBezierPath, getSmoothStepPath, getStraightPath, useInternalNode } from '@xyflow/react';
+import { BaseEdge, useInternalNode } from '@xyflow/react';
 
 import { getEdgeParams } from './utils.js';
 
@@ -10,9 +10,11 @@ function FloatingEdge({ id, source, target, markerEnd, style, label, labelStyle,
     return null;
   }
 
-  const { sx, sy, tx, ty } = getEdgeParams(sourceNode, targetNode);
+  var { sx, sy, tx, ty } = getEdgeParams(sourceNode, targetNode);
 
-  const [path, labelX, labelY] = getStraightPath({
+  ty = (sy < ty ? ty-=15 : ty+=15);
+
+  const [path, labelX, labelY] = getSpecialPath({
     sourceX: sx,
     sourceY: sy,
     targetX: tx,
@@ -34,5 +36,14 @@ function FloatingEdge({ id, source, target, markerEnd, style, label, labelStyle,
     />
   );
 }
+
+const getSpecialPath = ({ sourceX, sourceY, targetX, targetY }) => {
+  const centerX = (sourceX + targetX) / 2;
+  const centerY = (sourceY + targetY) / 2;
+
+  const offset = (sourceY - targetY)/4;
+
+  return [`M ${sourceX + offset} ${sourceY} Q ${centerX + offset} ${centerY} ${targetX + offset} ${targetY}`, centerX + offset , centerY];
+};
 
 export default FloatingEdge;

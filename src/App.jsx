@@ -140,6 +140,12 @@ const initialEdges = [
     source: 'Entity',
     target: 'Agent',
     label: 'wasAttributedTo'
+  },
+  {
+    id: 'e4',
+    source: 'Activity',
+    target: 'Entity',
+    label: 'used'
   }
 ];
 
