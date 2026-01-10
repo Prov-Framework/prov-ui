@@ -13,7 +13,7 @@ import {
 
 import '@xyflow/react/dist/style.css';
 
-import CustomNode from './CustomNode';
+import { EntityNode, AgentNode, ActivityNode } from './CustomNode';
 import FloatingEdge from './FloatingEdge';
 import CustomConnectionLine from './CustomConnectionLine';
 import ELK from 'elkjs/lib/elk.bundled.js';
@@ -36,7 +36,7 @@ const getLayoutedElements = (nodes, edges, options = {}) => {
       ...node,
       // Hardcode a width and height for elk to use when layouting.
       width: 150,
-      height: 50,
+      height: 70,
 
       layoutOptions: {
         // Use string partition ids so ELK treats them consistently.
@@ -104,19 +104,19 @@ const getLayoutedElements = (nodes, edges, options = {}) => {
 const initialNodes = [
   {
     id: 'Entity',
-    type: 'custom',
+    type: 'Entity',
     position: { x: 0, y: 0 },
     layerId: 2
   },
   {
     id: 'Activity',
-    type: 'custom',
+    type: 'Activity',
     position: { x: 0, y: 0 },
     layerId: 2
   },
   {
     id: 'Agent',
-    type: 'custom',
+    type: 'Agent',
     position: { x: 0, y: 0 },
     layerId: 1
   }
@@ -154,7 +154,9 @@ const connectionLineStyle = {
 };
 
 const nodeTypes = {
-  custom: CustomNode,
+  Entity: EntityNode,
+  Activity: ActivityNode,
+  Agent: AgentNode
 };
 
 const edgeTypes = {

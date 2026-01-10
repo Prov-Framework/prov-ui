@@ -12,14 +12,16 @@ function FloatingEdge({ id, source, target, markerEnd, style, label, labelStyle,
 
   var { sx, sy, tx, ty } = getEdgeParams(sourceNode, targetNode);
 
-  ty = (sy < ty ? ty-=15 : ty+=15);
+  const offset = 25;
+  sy = (sy < ty ? sy-=offset : sy+=offset);  
+  ty = (sy < ty ? ty-=offset : ty+=offset);
 
   const [path, labelX, labelY] = getSpecialPath({
     sourceX: sx,
     sourceY: sy,
     targetX: tx,
     targetY: ty,
-  });
+  }, offset);
 
   return (
     <BaseEdge
@@ -37,11 +39,11 @@ function FloatingEdge({ id, source, target, markerEnd, style, label, labelStyle,
   );
 }
 
-const getSpecialPath = ({ sourceX, sourceY, targetX, targetY }) => {
+const getSpecialPath = ({ sourceX, sourceY, targetX, targetY }, spacing) => {
   const centerX = (sourceX + targetX) / 2;
   const centerY = (sourceY + targetY) / 2;
 
-  const offset = (sourceY - targetY)/4;
+  const offset = (sourceY - targetY > 0 ? spacing : -spacing);
 
   return [`M ${sourceX + offset} ${sourceY} Q ${centerX + offset} ${centerY} ${targetX + offset} ${targetY}`, centerX + offset , centerY];
 };

@@ -14,9 +14,8 @@ body {
 
 .customNodeBody {
   width: 150px;
-  height: 80px;
+  height: 60px;
   position: relative;
-  border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -34,4 +33,22 @@ div.customHandle {
   transform: none;
   border: none;
   opacity: 0;
+}
+
+div.Entity {
+  background-color: rgb(149, 170, 137);
+  border-radius: 40px;
+}
+
+div.Agent {
+  background-color: black;
+  color: white;
+  border-radius: 50%;
+  width: 120px;
+  height: 80px;
+}
+
+div.Activity {
+  background-color: rgb(177, 148, 177);
+  border-radius: 10px;
 }
