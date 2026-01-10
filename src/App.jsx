@@ -103,19 +103,37 @@ const getLayoutedElements = (nodes, edges, options = {}) => {
 
 const initialNodes = [
   {
-    id: 'Entity',
+    id: 'Entity 2',
+    type: 'Entity',
+    position: { x: 0, y: 0 },
+    layerId: 3
+  },
+  {
+    id: 'Entity 1',
     type: 'Entity',
     position: { x: 0, y: 0 },
     layerId: 2
   },
   {
-    id: 'Activity',
+    id: 'Activity 2',
+    type: 'Activity',
+    position: { x: 0, y: 0 },
+    layerId: 3
+  },
+  {
+    id: 'Activity 1',
     type: 'Activity',
     position: { x: 0, y: 0 },
     layerId: 2
   },
   {
-    id: 'Agent',
+    id: 'Person Agent',
+    type: 'Agent',
+    position: { x: 0, y: 0 },
+    layerId: 2
+  },
+  {
+    id: 'Organization Agent',
     type: 'Agent',
     position: { x: 0, y: 0 },
     layerId: 1
@@ -124,29 +142,47 @@ const initialNodes = [
 
 const initialEdges = [
   {
-    id: 'e1',
-    source: 'Entity',
-    target: 'Activity',
-    label: 'wasGeneratedBy'
+    id: '1',
+    source: 'Entity 2',
+    label: 'wasDerivedFrom',
+    target: 'Entity 1'
   },
   {
-    id: 'e2',
-    source: 'Activity',
-    target: 'Agent',
-    label: 'wasAssociatedWith'
+    id: '2',
+    source: 'Entity 2',
+    label: 'wasAttributedTo',
+    target: 'Person Agent'
   },
   {
-    id: 'e3',
-    source: 'Entity',
-    target: 'Agent',
-    label: 'wasAttributedTo'
+    id: '3',
+    source: 'Entity 2',
+    label: 'wasGeneratedBy',
+    target: 'Activity 2'
   },
   {
-    id: 'e4',
-    source: 'Activity',
-    target: 'Entity',
-    label: 'used'
-  }
+    id: '4',
+    source: 'Person Agent',
+    label: 'actedOnBehalfOf',
+    target: 'Organization Agent'
+  },
+  {
+    id: '5',
+    source: 'Activity 2',
+    label: 'wasAssociatedWith',
+    target: 'Person Agent'
+  },
+  {
+    id: '6',
+    source: 'Activity 2',
+    label: 'wasInformedBy',
+    target: 'Activity 1'
+  },
+  {
+    id: '7',
+    source: 'Activity 2',
+    label: 'used',
+    target: 'Entity 1'
+  },
 ];
 
 const connectionLineStyle = {
