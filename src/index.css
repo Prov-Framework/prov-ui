@@ -7,14 +7,56 @@ body {
   box-sizing: border-box;
 }
 
-#app {
+div.panelContainer {
   width: 100vw;
   height: 100vh;
 }
 
+div.leftPanel {
+  height: 100%;
+  width: 20%;
+  float:left;
+}
+
+div.leftPanel .card {
+  height: 33%;
+}
+
+div.leftPanel .card .card-header {
+  border-radius: 0;
+}
+
+div.leftPanel .card .card-body {
+  padding: 0;
+}
+
+div.leftPanel .card .card-body .btn {
+  width: 100%;
+  border-width: 0 0 1px 0;
+  border-radius: 0;
+}
+
+.entities-card-header {
+  background-color: rgb(149, 170, 137);
+}
+
+.activities-card-header {
+  background-color: rgb(177, 148, 177);
+}
+
+.agents-card-header {
+  background-color: black;
+  color: white;
+}
+
+.react-flow {
+  width: 80% !important;
+  float:left;
+}
+
 .customNodeBody {
-  width: 150px;
-  height: 60px;
+  width: 175px;
+  height: 50px;
   position: relative;
   display: flex;
   justify-content: center;
@@ -44,7 +86,7 @@ div.Agent {
   background-color: black;
   color: white;
   border-radius: 50%;
-  width: 120px;
+  width: 150px;
   height: 80px;
 }
 

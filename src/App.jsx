@@ -12,11 +12,13 @@ import {
 } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { EntityNode, AgentNode, ActivityNode } from './CustomNode';
 import FloatingEdge from './FloatingEdge';
 import CustomConnectionLine from './CustomConnectionLine';
 import ELK from 'elkjs/lib/elk.bundled.js';
+import LeftPanel from './LeftPanel';
 
 const elk = new ELK();
 
@@ -35,8 +37,8 @@ const getLayoutedElements = (nodes, edges, options = {}) => {
     children: nodes.map((node) => ({
       ...node,
       // Hardcode a width and height for elk to use when layouting.
-      width: 150,
-      height: 70,
+      width: 200,
+      height: 100,
 
       layoutOptions: {
         // Use string partition ids so ELK treats them consistently.
@@ -207,7 +209,7 @@ const defaultEdgeOptions = {
   },
 };
 
-const EasyConnectExample = () => {
+const Graph = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
@@ -251,7 +253,10 @@ const EasyConnectExample = () => {
 };
 
 export default () => (
-  <ReactFlowProvider>
-    <EasyConnectExample />
-  </ReactFlowProvider>
+  <div className="panelContainer">
+    <LeftPanel />
+    <ReactFlowProvider className="reactFlowContainer">
+      <Graph />
+    </ReactFlowProvider>
+  </div>
 );
