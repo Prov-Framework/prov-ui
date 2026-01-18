@@ -1,5 +1,7 @@
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
+import EntityList from './EntityList';
+import ActivityList from './ActivityList';
+import AgentList from './AgentList';
 
 export default function LeftPanel() {
     return (
@@ -7,22 +9,19 @@ export default function LeftPanel() {
             <Card>
             <Card.Header className='entities-card-header'>Entities</Card.Header>
             <Card.Body>
-                <Button variant="outline-secondary">Entity 2</Button>
-                <Button variant="outline-secondary">Entity 1</Button>
+                <EntityList />
             </Card.Body>
             </Card>
             <Card>
             <Card.Header className='activities-card-header'>Activities</Card.Header>
             <Card.Body>
-                <Button variant="outline-secondary">Activity 2</Button>
-                <Button variant="outline-secondary">Activity 1</Button>
+                <ActivityList />
             </Card.Body>
             </Card>
             <Card>
             <Card.Header className='agents-card-header'>Agents</Card.Header>
             <Card.Body>
-                <Button variant="outline-secondary">Person Agent</Button>
-                <Button variant="outline-secondary">Organization Agent</Button>
+                <AgentList />
             </Card.Body>
             </Card>
         </div>

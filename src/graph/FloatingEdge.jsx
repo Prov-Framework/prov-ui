@@ -1,6 +1,6 @@
 import { BaseEdge, getStraightPath, useInternalNode } from '@xyflow/react';
 
-import { getEdgeParams } from './utils.js';
+import { getEdgeParams } from '../utils.js';
 
 function FloatingEdge({ id, source, target, markerEnd, style, label, labelStyle, labelShowBg }) {
   const sourceNode = useInternalNode(source);

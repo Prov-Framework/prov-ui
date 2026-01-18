@@ -14,11 +14,11 @@ import {
 import '@xyflow/react/dist/style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { EntityNode, AgentNode, ActivityNode } from './CustomNode';
-import FloatingEdge from './FloatingEdge';
-import CustomConnectionLine from './CustomConnectionLine';
+import { EntityNode, AgentNode, ActivityNode } from './graph/CustomNode';
+import FloatingEdge from './graph/FloatingEdge';
+import CustomConnectionLine from './graph/CustomConnectionLine';
 import ELK from 'elkjs/lib/elk.bundled.js';
-import LeftPanel from './LeftPanel';
+import LeftPanel from './left_panel/LeftPanel';
 
 const elk = new ELK();
 
